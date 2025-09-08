@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 15s  # how often to scrape targets
+
+scrape_configs:
+  # Monolithic service names as the fastapi_app job 
+  - job_name: 'fastapi_app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['10.7.1.4:5000']   # Monolithic application running on the port 5000
+
+  # GENAI job
+  - job_name: 'genai_app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['10.7.1.4:8000']   # Genai running on the port
+ 
+  # Node Exporter (VM metrics: CPU, Memory)
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['10.7.1.4:9100']
