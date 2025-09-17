@@ -174,11 +174,13 @@ Promtail collects logs from files and pushes them to Loki.
   - Sends logs to `http://loki:3100/loki/api/v1/push`  
 
 - **Scrape Jobs**  
-  | Job Name                  | Path                        | Labels Used               |
-  |---------------------------|-----------------------------|----------------------------|
-  | `system`                  | `/var/log/*log`              | `job: varlogs`             |
-  | `renote_monolithic_logs`   | `/mnt/logs/renote/*.log, *.txt` | `job: renote_monolithic_logs` |
-  | `genai_logs`               | `/mnt/logs/genai/*.log, *.txt`  | `job: genai_logs`          |
+ | Job Name                 | Path                            | Labels Used                   |
+| ------------------------ | ------------------------------- | ----------------------------- |
+| `system`                 | `/var/log/*log`                 | `job: varlogs`                |
+| `renote_monolithic_logs` | `/mnt/logs/renote/*.log, *.txt` | `job: renote_monolithic_logs` |
+| `genai_logs`             | `/mnt/logs/genai/*.log, *.txt`  | `job: genai_logs`             |
+| `cag_logs`               | `/mnt/logs/cag/*.log, *.txt`    | `job: cag_logs`               |
+
 
 ---
 
@@ -195,6 +197,7 @@ sudo mkdir -p /var/lib/loki
 # For Logs (Promtail reads from these)
 sudo mkdir -p /mnt/logs/renote
 sudo mkdir -p /mnt/logs/genai
+sudo mkdir -p /mnt/logs/cag
 
 ## Permissions
 
@@ -283,6 +286,7 @@ docker run -d --name promtail \
   -v /home/azureuser/Monitoring/lokistack:/mnt/config:ro \
   -v /mnt/logs/renote:/mnt/logs/renote:ro \
   -v /mnt/logs/genai:/mnt/logs/genai:ro \
+  -v /mnt/logs/cag:/mnt/logs/cag:ro \
   grafana/promtail:3.4.1 \
   -config.file=/mnt/config/promtail-config.yaml
 
