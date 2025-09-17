@@ -25,60 +25,68 @@ Monitoring/
 File: Monitoring/promstack/prometheus.yml
 
 global:
-  scrape_interval: 15s  # how often to scrape targets
+  scrape_interval: 10s  # how often to scrape targets
 
 scrape_configs:
   # Monolithic service names as the fastapi_app job 
   - job_name: 'fastapi_app'
     metrics_path: /metrics
     static_configs:
-      - targets: ['10.7.1.4:5000']   # Monolithic application running on port 5000
+      - targets: ['10.7.1.4:5000']   # Monolithic application running on the port 5000
 
   # GENAI job
   - job_name: 'genai_app'
     metrics_path: /metrics
     static_configs:
-      - targets: ['10.7.1.4:8000']   # GenAI application running on port 8000
- 
+      - targets: ['10.7.1.4:8000']   # Genai running on the port
+
   # Node Exporter (VM metrics: CPU, Memory)
   - job_name: 'node_exporter'
     static_configs:
       - targets: ['10.7.1.4:9100']
 
+  # CAG application job
+  - job_name: 'cag_app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['10.7.1.4:8085']   # CAG app running on port 8085
 
-# 🔎 Explanation of Jobs
+
+🔎 Explanation of Jobs (Updated)
 
 fastapi_app
 
 Target: 10.7.1.4:5000
 
-Monitors the monolithic FastAPI application.
+Purpose: Monitors the monolithic FastAPI application.
 
-Collects API-level metrics such as request counts, latencies, and errors.
+Metrics: API-level metrics such as request counts, latencies, and errors.
 
 genai_app
 
 Target: 10.7.1.4:8000
 
-Monitors the GenAI service.
+Purpose: Monitors the GenAI service.
 
-Tracks performance and usage of AI-related features.
+Metrics: Tracks performance and usage of AI-related features.
 
 node_exporter
 
 Target: 10.7.1.4:9100
 
-Monitors VM infrastructure metrics via Node Exporter:
+Purpose: Monitors VM infrastructure metrics via Node Exporter.
 
-CPU usage
+Metrics: CPU usage, Memory usage, Disk I/O, Network statistics.
 
-Memory usage
+cag_app
 
-Disk I/O
+Target: 10.7.1.4:8085
 
-Network statistics
+Purpose: Monitors the CAG application service.
 
+Metrics: Application-level health, request performance, and error tracking.
 
+📊 Updated Architecture Diagram
         +--------------------+
         |  FastAPI App       |
         |  (10.7.1.4:5000)   |
@@ -92,6 +100,12 @@ Network statistics
                  |
                  |
         +--------------------+
+        |  CAG App           |
+        |  (10.7.1.4:8085)   |
+        +--------------------+
+                 |
+                 |
+        +--------------------+
         |  Node Exporter     |
         |  (10.7.1.4:9100)   |
         +--------------------+
@@ -101,6 +115,7 @@ Network statistics
         |   Prometheus       |
         |   (promstack)      |
         +--------------------+
+
 ```
 
 # 📜 Loki Stack Documentation
