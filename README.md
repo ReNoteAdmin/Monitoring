@@ -303,6 +303,8 @@ Explanation:
 
 -v /mnt/logs/genai:/mnt/logs/genai:ro → Mount logs from genai app (read-only)
 
+-v /mnt/logs/cag:/mnt/logs/cag:ro -> Mount logs from cag app(read-only)
+
 grafana/promtail:3.4.1 → Official Promtail image, version 3.4.1
 
 -config.file=/mnt/config/promtail-config.yaml → Tell Promtail which config file to use
