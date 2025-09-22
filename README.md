@@ -211,7 +211,7 @@ sudo chown -R 10001:10001 /var/lib/loki
 # 1️⃣ Run Prometheus
 ```plaintext
 docker run -d --name prometheus --restart=always \
-  --network milvus \
+  --network renote-net \
   -p 9090:9090 \
   -v /home/azureuser/Monitoring/promstack/prometheus.yml:/etc/prometheus/prometheus.yml:ro \
   -v /var/lib/prometheus:/prometheus \
@@ -245,13 +245,7 @@ prom/prometheus → Official Prometheus image
 ```plaintext
 
 Command:
-docker run -d --name loki --restart=always \
-  --network milvus \
-  -p 3100:3100 \
-  -v /home/azureuser/Monitoring/lokistack/loki-config.yaml:/etc/loki/config.yml:ro \
-  -v /var/lib/loki:/var/lib/loki \
-  grafana/loki:3.4.1 \
-  -config.file=/etc/loki/config.yml
+docker run -d --name loki --restart=always   --network renote-net   -p 3100:3100   -v /home/azureuser/Monitoring/lokistack/loki-config.yaml:/etc/loki/config.yml:ro   -v /var/lib/loki:/var/lib/loki   grafana/loki:3.4.1   -config.file=/etc/loki/config.yml
 
 
 Explanation:
@@ -281,14 +275,7 @@ grafana/loki:3.4.1 → Official Loki image, version 3.4.1
 
 Command:
 
-docker run -d --name promtail \
-  --network milvus \
-  -v /home/azureuser/Monitoring/lokistack:/mnt/config:ro \
-  -v /mnt/logs/renote:/mnt/logs/renote:ro \
-  -v /mnt/logs/genai:/mnt/logs/genai:ro \
-  -v /mnt/logs/cag:/mnt/logs/cag:ro \
-  grafana/promtail:3.4.1 \
-  -config.file=/mnt/config/promtail-config.yaml
+docker run -d --name promtail --restart=always   --network renote-net   -v /home/azureuser/Monitoring/lokistack:/mnt/config:ro   -v /mnt/logs/renote:/mnt/logs/renote:ro   -v /mnt/logs/genai:/mnt/logs/genai:ro   -v /mnt/logs/cag:/mnt/logs/cag:ro   grafana/promtail:3.4.1   -config.file=/mnt/config/promtail-config.yaml
 
 
 Explanation:
